@@ -22,7 +22,7 @@ class EzAnimation extends Listenable {
   final Curve reverseCurve;
 
   /// Custom Ticker Provider for not using the default TickerProvider
-  CustomProvider _tickerProvider = CustomProvider();
+  _CustomProvider _tickerProvider = _CustomProvider();
 
   /// Tween to create an animation from the given values
   Tween _tween;
@@ -92,7 +92,7 @@ class EzAnimation extends Listenable {
 
 /// Using a Custom [TickerProvider] helps not use a [SingleTickerProviderStateMixin] or [TickerProviderStateMixin]
 /// in the app resulting in removing redundant code
-class CustomProvider extends TickerProvider {
+class _CustomProvider extends TickerProvider {
   /// Ticker that provides ticks for the controller
   Ticker _ticker;
 
