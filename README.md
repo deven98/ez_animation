@@ -20,6 +20,12 @@ With EzAnimation, there is no need to burden your code with TickerProviders, the
 
 ### DEFINE EzAnimation
 
+(RECOMMENDED METHOD) A more efficient animation:
+
+    EzAnimation animation = EzAnimation(10.0, 100.0, Duration(seconds: 1), context: context);
+
+ANOTHER METHOD: (Note that this animation needs to be manually stopped or it will go to completion even when another screen is pushed.)
+
     EzAnimation animation = EzAnimation(10.0, 100.0, Duration(seconds: 1));
 
 (Notice that you can define this outside of initState, unlike normal animation controllers)
@@ -36,6 +42,14 @@ With EzAnimation, there is no need to burden your code with TickerProviders, the
 
     animation.stop();
 
+## REPEAT ANIMATION
+
+    animation.repeat();
+
+## RESET ANIMATION
+
+    animation.reset();
+
 ### REVERSE ANIMATION
 
     animation.reverse();
@@ -43,6 +57,24 @@ With EzAnimation, there is no need to burden your code with TickerProviders, the
     // OR
     
     animation.reverse(from: 0.5);
+
+### DEFINE WHAT HAPPENS WHEN NAVIGATOR PUSHES ANOTHER PAGE ON TOP
+
+    EzAnimation animation = EzAnimation(10.0, 100.0, Duration(seconds: 1), context: context, onNavigate: OnNavigate.pauseAnimation);
+
+An animation can either reset or pause when the navigator pushes another page on top. Use the onNavigate page to achieve this.
+
+NOTE: A PAUSED ANIMATION NEEDS TO BE MANUALLY RESTARTED AFTER COMING BACK TO THE MAIN PAGE
+
+    onPressed: () async {
+        await Navigator.of(context).push(MaterialPageRoute(builder: (context) => DemoPage()));
+        animation.start();
+    }
+
+    resetAnimation -> Resets animation to the start
+    pauseAnimation -> Pauses animation at that instant (You need to manually restart this when it comes back)
+    letItRun -> Animation will go to completion unless animation.stop() is called.
+    takeToEnd -> Takes animation to final value instantly
 
 ### REBUILD UI
 
