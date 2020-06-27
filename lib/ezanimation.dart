@@ -48,13 +48,15 @@ class EzAnimation extends Listenable {
 
   EzAnimation(this.begin, this.end, this.duration,
       {this.curve = Curves.linear,
-        this.reverseCurve = Curves.linear,
-        this.context,
-        this.onNavigate = OnNavigate.resetAnimation}) {
+      this.reverseCurve = Curves.linear,
+      this.context,
+      this.onNavigate = OnNavigate.resetAnimation}) {
     _tickerProvider = _CustomProvider();
     _tween = Tween(begin: begin, end: end);
-    _controller = AnimationController(vsync: _tickerProvider, duration: duration);
-    _resultAnimation = _tween.animate(CurvedAnimation(parent: _controller, curve: curve, reverseCurve: reverseCurve));
+    _controller =
+        AnimationController(vsync: _tickerProvider, duration: duration);
+    _resultAnimation = _tween.animate(CurvedAnimation(
+        parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
     /// If a context is given, we listen to navigation changes
     if (context != null) {
@@ -82,7 +84,7 @@ class EzAnimation extends Listenable {
         });
       } else if (onNavigate == OnNavigate.letItRun) {
         // Do nothing, let it run
-      } else if(onNavigate == OnNavigate.takeToEnd) {
+      } else if (onNavigate == OnNavigate.takeToEnd) {
         _tickerProvider._ticker.stop();
         _listeners.forEach((element) {
           _resultAnimation.removeListener(element);
