@@ -1,7 +1,5 @@
-## [0.2.0] - 27/06/2020
+## [0.3.0] - 28/06/2020
 
-* Added optimisations to builds after Navigation (Thanks to Remi Rousselet for pointing out problems)
-* Added repeat()
-* Added reset()
-* Added options for animation state when another page is pushed by Navigator
-* CustomProvider is now hidden (Thanks to Diego Velásquez for the PR)
+* Added sequence animations (normal and tween sequence)
+* Added EzAnimation.tween for using Tweens like ColorTween
+* Added EzAnimation.tweenSequence for passing a direct TweenSequence to the animation

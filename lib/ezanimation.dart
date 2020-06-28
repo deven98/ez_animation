@@ -10,10 +10,10 @@ enum OnNavigate { resetAnimation, pauseAnimation, letItRun, takeToEnd }
 /// [Listenable] is extended for easy rebuilds when value changes
 class EzAnimation extends Listenable {
   /// Begin value for [Tween] that creates the animation
-  final begin;
+  var begin;
 
   /// End value for [Tween] that creates the animation
-  final end;
+  var end;
 
   /// Duration to pass to the [AnimationController]
   final Duration duration;
@@ -36,6 +36,9 @@ class EzAnimation extends Listenable {
   /// Tween to create an animation from the given values
   Tween _tween;
 
+  /// Tween Sequence to create an animation from the given values
+  TweenSequence _tweenSequence;
+
   /// AnimationController to control the resultant animations
   /// Making a custom implementation of how tickers function internally was unnecessary
   AnimationController _controller;
@@ -56,6 +59,77 @@ class EzAnimation extends Listenable {
     _controller =
         AnimationController(vsync: _tickerProvider, duration: duration);
     _resultAnimation = _tween.animate(CurvedAnimation(
+        parent: _controller, curve: curve, reverseCurve: reverseCurve));
+
+    /// If a context is given, we listen to navigation changes
+    if (context != null) {
+      /// Listen for page changes, mute ticker when current context is no longer visible
+      _resultAnimation.addListener(_animationObserver);
+
+      /// Adds internal listener
+      _listeners.add(_animationObserver);
+    }
+  }
+
+  /// Creates an [Animation] from the given sequence.
+  EzAnimation.sequence(List<SequenceItem> sequence, this.duration,
+      {this.curve = Curves.linear,
+        this.reverseCurve = Curves.linear,
+        this.context,
+        this.onNavigate = OnNavigate.resetAnimation}) {
+    _tickerProvider = _CustomProvider();
+    _tweenSequence = TweenSequence(sequence.map((e) => TweenSequenceItem(tween: Tween(begin: e.begin, end: e.end), weight: e.weight)).toList());
+    _controller =
+        AnimationController(vsync: _tickerProvider, duration: duration);
+    _resultAnimation = _tweenSequence.animate(CurvedAnimation(
+        parent: _controller, curve: curve, reverseCurve: reverseCurve));
+
+    /// If a context is given, we listen to navigation changes
+    if (context != null) {
+      /// Listen for page changes, mute ticker when current context is no longer visible
+      _resultAnimation.addListener(_animationObserver);
+
+      /// Adds internal listener
+      _listeners.add(_animationObserver);
+    }
+  }
+
+  /// Uses the given [Tween] to create a sequence
+  /// This is helpful to use things like [ColorTween]
+  EzAnimation.tween(Tween tween, this.duration,
+      {this.curve = Curves.linear,
+        this.reverseCurve = Curves.linear,
+        this.context,
+        this.onNavigate = OnNavigate.resetAnimation}) {
+    _tickerProvider = _CustomProvider();
+    _tween = tween;
+    _controller =
+        AnimationController(vsync: _tickerProvider, duration: duration);
+    _resultAnimation = _tween.animate(CurvedAnimation(
+        parent: _controller, curve: curve, reverseCurve: reverseCurve));
+
+    /// If a context is given, we listen to navigation changes
+    if (context != null) {
+      /// Listen for page changes, mute ticker when current context is no longer visible
+      _resultAnimation.addListener(_animationObserver);
+
+      /// Adds internal listener
+      _listeners.add(_animationObserver);
+    }
+  }
+
+  /// Creates an [Animation] from the given [TweenSequence]
+  ///   /// This is helpful to use things like [ColorTween]
+  EzAnimation.tweenSequence(TweenSequence sequence, this.duration,
+      {this.curve = Curves.linear,
+        this.reverseCurve = Curves.linear,
+        this.context,
+        this.onNavigate = OnNavigate.resetAnimation}) {
+    _tickerProvider = _CustomProvider();
+    _tweenSequence = sequence;
+    _controller =
+        AnimationController(vsync: _tickerProvider, duration: duration);
+    _resultAnimation = _tweenSequence.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
     /// If a context is given, we listen to navigation changes
@@ -178,4 +252,12 @@ class _CustomProvider extends TickerProvider {
   void dispose() {
     _ticker.dispose();
   }
+}
+
+class SequenceItem {
+  final begin;
+  final end;
+  final weight;
+
+  SequenceItem(this.begin, this.end, {this.weight = 1.0});
 }

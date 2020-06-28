@@ -110,3 +110,30 @@ You can use normal listeners and rebuild UI with AnimatedBuilder as usual.
         animation.reverse();
       }
     });
+
+### USE ANIMATION SEQUENCES
+
+You can have multiple animations running in series with weights with EzAnimation.sequence()
+
+    EzAnimation ezAnimation = EzAnimation.sequence([
+      SequenceItem(0.0, 100.0, weight: 2),
+      SequenceItem(100.0, 50.0),
+      SequenceItem(50.0, 100.0),
+    ], Duration(seconds: 2), context: context);
+
+    ezAnimation.start();
+
+### USE SPECIALIZED TWEENS
+
+Use the EzAnimation.tween() to pass in other Tween types such as ColorTween
+
+    EzAnimation ezAnimation = EzAnimation.tween(ColorTween(begin: Colors.red, end: Colors.blue), Duration(seconds: 2), context: context);
+    
+    ezAnimation.start();
+
+Similarly, the EzAnimation.tweenSequence allows you to create a sequence with ColorTweens and other tweens
+
+    EzAnimation ezAnimation = EzAnimation.tweenSequence(TweenSequence([
+        TweenSequenceItem(tween: ColorTween(begin: Colors.red, end: Colors.blue), weight: 1.0),
+        TweenSequenceItem(tween: ColorTween(begin: Colors.red, end: Colors.blue), weight: 2.0),
+    ]), Duration(seconds: 2), context: context);
