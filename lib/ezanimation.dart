@@ -74,11 +74,14 @@ class EzAnimation extends Listenable {
   /// Creates an [Animation] from the given sequence.
   EzAnimation.sequence(List<SequenceItem> sequence, this.duration,
       {this.curve = Curves.linear,
-        this.reverseCurve = Curves.linear,
-        this.context,
-        this.onNavigate = OnNavigate.resetAnimation}) {
+      this.reverseCurve = Curves.linear,
+      this.context,
+      this.onNavigate = OnNavigate.resetAnimation}) {
     _tickerProvider = _CustomProvider();
-    _tweenSequence = TweenSequence(sequence.map((e) => TweenSequenceItem(tween: Tween(begin: e.begin, end: e.end), weight: e.weight)).toList());
+    _tweenSequence = TweenSequence(sequence
+        .map((e) => TweenSequenceItem(
+            tween: Tween(begin: e.begin, end: e.end), weight: e.weight))
+        .toList());
     _controller =
         AnimationController(vsync: _tickerProvider, duration: duration);
     _resultAnimation = _tweenSequence.animate(CurvedAnimation(
@@ -98,9 +101,9 @@ class EzAnimation extends Listenable {
   /// This is helpful to use things like [ColorTween]
   EzAnimation.tween(Tween tween, this.duration,
       {this.curve = Curves.linear,
-        this.reverseCurve = Curves.linear,
-        this.context,
-        this.onNavigate = OnNavigate.resetAnimation}) {
+      this.reverseCurve = Curves.linear,
+      this.context,
+      this.onNavigate = OnNavigate.resetAnimation}) {
     _tickerProvider = _CustomProvider();
     _tween = tween;
     _controller =
@@ -122,9 +125,9 @@ class EzAnimation extends Listenable {
   ///   /// This is helpful to use things like [ColorTween]
   EzAnimation.tweenSequence(TweenSequence sequence, this.duration,
       {this.curve = Curves.linear,
-        this.reverseCurve = Curves.linear,
-        this.context,
-        this.onNavigate = OnNavigate.resetAnimation}) {
+      this.reverseCurve = Curves.linear,
+      this.context,
+      this.onNavigate = OnNavigate.resetAnimation}) {
     _tickerProvider = _CustomProvider();
     _tweenSequence = sequence;
     _controller =
