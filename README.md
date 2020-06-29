@@ -20,13 +20,25 @@ With EzAnimation, there is no need to burden your code with TickerProviders, the
 
 ### DEFINE EzAnimation
 
-(RECOMMENDED METHOD) A more efficient animation:
+(RECOMMENDED METHOD 1) Passing context:
 
     EzAnimation animation = EzAnimation(10.0, 100.0, Duration(seconds: 1), context: context);
+    
+    // This animation needs to be manually restarted when another page is pushed and then Navigator comes back
+    // The onNavigate param helps define the behaviour when another page is pushed
 
-ANOTHER METHOD: (Note that this animation needs to be manually stopped or it will go to completion even when another screen is pushed.)
+(RECOMMENDED METHOD 2) Passing vsync:
+
+    EzAnimation animation = EzAnimation(10.0, 100.0, Duration(seconds: 1), context: context);
+    
+    // Here the state class needs to add SingleTickerProviderMixin or TickerProviderMixin
+    // onNavigate does not work in this case as the page ticker defines the state of the animation
+
+A SIMPLE METHOD (LESS PERFORMANT): No context or vsync
 
     EzAnimation animation = EzAnimation(10.0, 100.0, Duration(seconds: 1));
+    
+    // Note that this animation needs to be manually stopped if you intend to push another page as it will go to completion without it.
 
 (Notice that you can define this outside of initState, unlike normal animation controllers)
 

@@ -30,6 +30,8 @@ class EzAnimation extends Listenable {
   /// What to do when the current page is navigated away from
   final OnNavigate onNavigate;
 
+  final TickerProvider vsync;
+
   /// Custom Ticker Provider for not using the default TickerProvider
   _CustomProvider _tickerProvider;
 
@@ -49,20 +51,26 @@ class EzAnimation extends Listenable {
   /// Stores a list of all listeners that listen to the animation
   List<Function> _listeners = [];
 
-  EzAnimation(this.begin, this.end, this.duration,
-      {this.curve = Curves.linear,
-      this.reverseCurve = Curves.linear,
-      this.context,
-      this.onNavigate = OnNavigate.resetAnimation}) {
+  EzAnimation(
+    this.begin,
+    this.end,
+    this.duration, {
+    this.curve = Curves.linear,
+    this.reverseCurve = Curves.linear,
+    this.context,
+    this.onNavigate = OnNavigate.resetAnimation,
+    this.vsync,
+  }) {
     _tickerProvider = _CustomProvider();
     _tween = Tween(begin: begin, end: end);
-    _controller =
-        AnimationController(vsync: _tickerProvider, duration: duration);
+    _controller = AnimationController(
+        vsync: vsync == null ? _tickerProvider : vsync, duration: duration);
     _resultAnimation = _tween.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
     /// If a context is given, we listen to navigation changes
-    if (context != null) {
+    /// If vsync is provided, this is automatically done by the ticker on the page
+    if (context != null && vsync == null) {
       /// Listen for page changes, mute ticker when current context is no longer visible
       _resultAnimation.addListener(_animationObserver);
 
@@ -72,23 +80,28 @@ class EzAnimation extends Listenable {
   }
 
   /// Creates an [Animation] from the given sequence.
-  EzAnimation.sequence(List<SequenceItem> sequence, this.duration,
-      {this.curve = Curves.linear,
-      this.reverseCurve = Curves.linear,
-      this.context,
-      this.onNavigate = OnNavigate.resetAnimation}) {
+  EzAnimation.sequence(
+    List<SequenceItem> sequence,
+    this.duration, {
+    this.curve = Curves.linear,
+    this.reverseCurve = Curves.linear,
+    this.context,
+    this.onNavigate = OnNavigate.resetAnimation,
+    this.vsync,
+  }) {
     _tickerProvider = _CustomProvider();
     _tweenSequence = TweenSequence(sequence
         .map((e) => TweenSequenceItem(
             tween: Tween(begin: e.begin, end: e.end), weight: e.weight))
         .toList());
-    _controller =
-        AnimationController(vsync: _tickerProvider, duration: duration);
+    _controller = AnimationController(
+        vsync: vsync == null ? _tickerProvider : vsync, duration: duration);
     _resultAnimation = _tweenSequence.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
     /// If a context is given, we listen to navigation changes
-    if (context != null) {
+    /// If vsync is provided, this is automatically done by the ticker on the page
+    if (context != null && vsync == null) {
       /// Listen for page changes, mute ticker when current context is no longer visible
       _resultAnimation.addListener(_animationObserver);
 
@@ -99,20 +112,25 @@ class EzAnimation extends Listenable {
 
   /// Uses the given [Tween] to create a sequence
   /// This is helpful to use things like [ColorTween]
-  EzAnimation.tween(Tween tween, this.duration,
-      {this.curve = Curves.linear,
-      this.reverseCurve = Curves.linear,
-      this.context,
-      this.onNavigate = OnNavigate.resetAnimation}) {
+  EzAnimation.tween(
+    Tween tween,
+    this.duration, {
+    this.curve = Curves.linear,
+    this.reverseCurve = Curves.linear,
+    this.context,
+    this.onNavigate = OnNavigate.resetAnimation,
+    this.vsync,
+  }) {
     _tickerProvider = _CustomProvider();
     _tween = tween;
-    _controller =
-        AnimationController(vsync: _tickerProvider, duration: duration);
+    _controller = AnimationController(
+        vsync: vsync == null ? _tickerProvider : vsync, duration: duration);
     _resultAnimation = _tween.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
     /// If a context is given, we listen to navigation changes
-    if (context != null) {
+    /// If vsync is provided, this is automatically done by the ticker on the page
+    if (context != null && vsync == null) {
       /// Listen for page changes, mute ticker when current context is no longer visible
       _resultAnimation.addListener(_animationObserver);
 
@@ -123,20 +141,25 @@ class EzAnimation extends Listenable {
 
   /// Creates an [Animation] from the given [TweenSequence]
   ///   /// This is helpful to use things like [ColorTween]
-  EzAnimation.tweenSequence(TweenSequence sequence, this.duration,
-      {this.curve = Curves.linear,
-      this.reverseCurve = Curves.linear,
-      this.context,
-      this.onNavigate = OnNavigate.resetAnimation}) {
+  EzAnimation.tweenSequence(
+    TweenSequence sequence,
+    this.duration, {
+    this.curve = Curves.linear,
+    this.reverseCurve = Curves.linear,
+    this.context,
+    this.onNavigate = OnNavigate.resetAnimation,
+    this.vsync,
+  }) {
     _tickerProvider = _CustomProvider();
     _tweenSequence = sequence;
-    _controller =
-        AnimationController(vsync: _tickerProvider, duration: duration);
+    _controller = AnimationController(
+        vsync: vsync == null ? _tickerProvider : vsync, duration: duration);
     _resultAnimation = _tweenSequence.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
     /// If a context is given, we listen to navigation changes
-    if (context != null) {
+    /// If vsync is provided, this is automatically done by the ticker on the page
+    if (context != null && vsync == null) {
       /// Listen for page changes, mute ticker when current context is no longer visible
       _resultAnimation.addListener(_animationObserver);
 
@@ -196,6 +219,11 @@ class EzAnimation extends Listenable {
 
   /// Starts an animation from a value
   void start({double from}) {
+    if (vsync != null) {
+      _controller.forward(from: from);
+      return;
+    }
+
     if (!_tickerProvider._ticker.muted) {
       _controller.forward(from: from);
     } else {
