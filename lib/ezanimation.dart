@@ -263,8 +263,10 @@ class EzAnimation extends Listenable {
 
   /// Disposes ticker and controller
   void dispose() {
-    _tickerProvider.dispose();
-    _controller.dispose();
+    if(vsync == null) {
+      _tickerProvider?.dispose();
+    }
+    _controller?.dispose();
   }
 }
 
@@ -281,7 +283,7 @@ class _CustomProvider extends TickerProvider {
   }
 
   void dispose() {
-    _ticker.dispose();
+    _ticker?.dispose();
   }
 }
 
