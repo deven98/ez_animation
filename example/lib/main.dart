@@ -38,7 +38,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  EzAnimation animation = EzAnimation(10.0, 100.0, Duration(seconds: 2), reverseCurve: Curves.bounceInOut);
+  EzAnimation animation = EzAnimation(10.0, 100.0, Duration(seconds: 2),
+      reverseCurve: Curves.bounceInOut);
 
   @override
   void initState() {
@@ -65,9 +66,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.blue,
               ),
             );
-          }
-      ),
+          }),
     );
   }
 }
-
