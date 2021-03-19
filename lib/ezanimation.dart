@@ -10,10 +10,10 @@ enum OnNavigate { resetAnimation, pauseAnimation, letItRun, takeToEnd }
 /// [Listenable] is extended for easy rebuilds when value changes
 class EzAnimation extends Listenable {
   /// Begin value for [Tween] that creates the animation
-  var begin;
+  late var begin;
 
   /// End value for [Tween] that creates the animation
-  var end;
+  late var end;
 
   /// Duration to pass to the [AnimationController]
   final Duration duration;
@@ -25,31 +25,31 @@ class EzAnimation extends Listenable {
   final Curve reverseCurve;
 
   /// A handle to the tree to listen for navigation
-  final BuildContext context;
+  final BuildContext? context;
 
   /// What to do when the current page is navigated away from
   final OnNavigate onNavigate;
 
-  final TickerProvider vsync;
+  final TickerProvider? vsync;
 
   /// Custom Ticker Provider for not using the default TickerProvider
-  _CustomProvider _tickerProvider;
+  late _CustomProvider _tickerProvider;
 
   /// Tween to create an animation from the given values
-  Tween _tween;
+  late Tween _tween;
 
   /// Tween Sequence to create an animation from the given values
-  TweenSequence _tweenSequence;
+  late TweenSequence _tweenSequence;
 
   /// AnimationController to control the resultant animations
   /// Making a custom implementation of how tickers function internally was unnecessary
-  AnimationController _controller;
+  late AnimationController _controller;
 
   /// The animation that the user ultimately needs
-  Animation _resultAnimation;
+  late Animation _resultAnimation;
 
   /// Stores a list of all listeners that listen to the animation
-  List<Function> _listeners = [];
+  late List<void Function()> _listeners = [];
 
   EzAnimation(
     this.begin,
@@ -64,7 +64,7 @@ class EzAnimation extends Listenable {
     _tickerProvider = _CustomProvider();
     _tween = Tween(begin: begin, end: end);
     _controller = AnimationController(
-        vsync: vsync == null ? _tickerProvider : vsync, duration: duration);
+        vsync: vsync == null ? _tickerProvider : vsync!, duration: duration);
     _resultAnimation = _tween.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
@@ -95,7 +95,7 @@ class EzAnimation extends Listenable {
             tween: Tween(begin: e.begin, end: e.end), weight: e.weight))
         .toList());
     _controller = AnimationController(
-        vsync: vsync == null ? _tickerProvider : vsync, duration: duration);
+        vsync: vsync == null ? _tickerProvider : vsync!, duration: duration);
     _resultAnimation = _tweenSequence.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
@@ -124,7 +124,7 @@ class EzAnimation extends Listenable {
     _tickerProvider = _CustomProvider();
     _tween = tween;
     _controller = AnimationController(
-        vsync: vsync == null ? _tickerProvider : vsync, duration: duration);
+        vsync: vsync == null ? _tickerProvider : vsync!, duration: duration);
     _resultAnimation = _tween.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
@@ -153,7 +153,7 @@ class EzAnimation extends Listenable {
     _tickerProvider = _CustomProvider();
     _tweenSequence = sequence;
     _controller = AnimationController(
-        vsync: vsync == null ? _tickerProvider : vsync, duration: duration);
+        vsync: vsync == null ? _tickerProvider : vsync!, duration: duration);
     _resultAnimation = _tweenSequence.animate(CurvedAnimation(
         parent: _controller, curve: curve, reverseCurve: reverseCurve));
 
@@ -170,7 +170,7 @@ class EzAnimation extends Listenable {
 
   /// If current widget is no longer displayed, pause or reset animation depending upon provided value of [OnNavigate]
   void _animationObserver() {
-    if (!ModalRoute.of(context).isCurrent) {
+    if ((ModalRoute.of(context!)?.isCurrent ?? true) == false) {
       if (onNavigate == OnNavigate.pauseAnimation) {
         _tickerProvider._ticker.muted = true;
       } else if (onNavigate == OnNavigate.resetAnimation) {
@@ -218,7 +218,7 @@ class EzAnimation extends Listenable {
   }
 
   /// Starts an animation from a value
-  void start({double from}) {
+  void start({double? from}) {
     if (vsync != null) {
       _controller.forward(from: from);
       return;
@@ -232,7 +232,7 @@ class EzAnimation extends Listenable {
   }
 
   /// Repeats animation
-  void repeat({double min, double max, bool rev = false, Duration period}) {
+  void repeat({double? min, double? max, bool rev = false, Duration? period}) {
     _controller.repeat(min: min, max: max, reverse: rev, period: period);
   }
 
@@ -242,7 +242,7 @@ class EzAnimation extends Listenable {
   }
 
   /// Reverses animation
-  void reverse({double from}) {
+  void reverse({double? from}) {
     _controller.reverse(from: from);
   }
 
@@ -263,7 +263,7 @@ class EzAnimation extends Listenable {
 
   /// Disposes ticker and controller
   void dispose() {
-    if(vsync == null) {
+    if (vsync == null) {
       _tickerProvider?.dispose();
     }
     _controller?.dispose();
@@ -274,7 +274,7 @@ class EzAnimation extends Listenable {
 /// in the app resulting in removing redundant code
 class _CustomProvider extends TickerProvider {
   /// Ticker that provides ticks for the controller
-  Ticker _ticker;
+  late Ticker _ticker;
 
   @override
   Ticker createTicker(onTick) {
@@ -283,7 +283,7 @@ class _CustomProvider extends TickerProvider {
   }
 
   void dispose() {
-    _ticker?.dispose();
+    _ticker.dispose();
   }
 }
 
