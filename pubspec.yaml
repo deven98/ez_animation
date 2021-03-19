@@ -1,7 +1,6 @@
 name: ezanimation
 description: Easy Animations - No Controllers, No Tickers, Only the necessary parts.
-version: 0.4.1
-author: Deven Joshi <deven9852@gmail.com>
+version: 0.5.0
 homepage: https://www.github.com/deven98/ez_animation
 repository: https://www.github.com/deven98/ez_animation
 
