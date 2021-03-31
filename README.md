@@ -20,7 +20,8 @@ Here is a simple example to create an animation with an expanding box:
 
 1) First, we define a Container with a starting size of 50.0
 
-    `return Scaffold(
+    ```
+    return Scaffold(
       body: Center(
         child: Container(
           color: Colors.yellow,
@@ -28,17 +29,21 @@ Here is a simple example to create an animation with an expanding box:
           width: 50.0,
         ),
       ),
-    );`
+    );
+   ```
     
     ![](https://github.com/deven98/ez_animation/tree/master/screenshots/start.png)
     
 2) Next, we define an animation to increase size
 
-    `EzAnimation ezAnimation = EzAnimation(50.0, 200.0, Duration(seconds: 2));`
+    ```
+    EzAnimation ezAnimation = EzAnimation(50.0, 200.0, Duration(seconds: 2));
+   ```
 
 3) Then, we simply plugin in values and start the animation when we need to - in this case we will do it when the box is tapped
 
-    `return Scaffold(
+    ```
+    return Scaffold(
       body: Center(
         child: InkWell(
           onTap: () {
@@ -56,7 +61,8 @@ Here is a simple example to create an animation with an expanding box:
           ),
         ),
       ),
-    );`
+    );
+   ```
     
     ![](https://github.com/deven98/ez_animation/tree/master/screenshots/result.gif)
     
