@@ -32,13 +32,13 @@ Here is a simple example to create an animation with an expanding box:
     );
    ```
     
-    ![](https://github.com/deven98/ez_animation/tree/master/screenshots/start.png)
+    ![alt text](https://github.com/deven98/ez_animation/blob/master/screenshots/start.png)
     
 2) Next, we define an animation to increase size
 
     ```
     EzAnimation ezAnimation = EzAnimation(50.0, 200.0, Duration(seconds: 2));
-   ```
+    ```
 
 3) Then, we simply plugin in values and start the animation when we need to - in this case we will do it when the box is tapped
 
@@ -62,9 +62,9 @@ Here is a simple example to create an animation with an expanding box:
         ),
       ),
     );
-   ```
+    ```
     
-    ![](https://github.com/deven98/ez_animation/tree/master/screenshots/result.gif)
+    ![alt text](https://github.com/deven98/ez_animation/blob/master/screenshots/result.gif)
     
 4) And that's it!
 
