@@ -16,6 +16,52 @@ Not just to beginners - when creating an explicit animation, even advanced users
 
 With EzAnimation, there is no need to burden your code with TickerProviders, the complicated logic of curves, different components of animation, etc.
 
+Here is a simple example to create an animation with an expanding box:
+
+1) First, we define a Container with a starting size of 50.0
+
+    `return Scaffold(
+      body: Center(
+        child: Container(
+          color: Colors.yellow,
+          height: 50.0,
+          width: 50.0,
+        ),
+      ),
+    );`
+    
+    ![](https://github.com/deven98/ez_animation/tree/master/screenshots/start.png)
+    
+2) Next, we define an animation to increase size
+
+    `EzAnimation ezAnimation = EzAnimation(50.0, 200.0, Duration(seconds: 2));`
+
+3) Then, we simply plugin in values and start the animation when we need to - in this case we will do it when the box is tapped
+
+    `return Scaffold(
+      body: Center(
+        child: InkWell(
+          onTap: () {
+            ezAnimation.start();
+          },
+          child: AnimatedBuilder(
+            animation: ezAnimation,
+            builder: (context, snapshot) {
+              return Container(
+                color: Colors.yellow,
+                height: ezAnimation.value,
+                width: ezAnimation.value,
+              );
+            }
+          ),
+        ),
+      ),
+    );`
+    
+    ![](https://github.com/deven98/ez_animation/tree/master/screenshots/result.gif)
+    
+4) And that's it!
+
 ## TO USE:
 
 ### DEFINE EzAnimation
