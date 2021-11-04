@@ -2,17 +2,14 @@
 
 Easy Animations - No Controllers, No Tickers, Only the necessary parts.
 
-NO NEED TO ADD TickerProviderStateMixins
-NO MORE AnimationControllers
-NO MORE Tweens
-EASILY ADD Curves AND ReverseCurves
+Easily add Curves and ReverseCurves
 
-## NO MORE COMPLICATION
+## Introduction
 
 Normal animations involve a fair amount of complexity: AnimationControllers, Tweens, Animation, Tickers are not familiar concepts to many.
 Not just to beginners - when creating an explicit animation, even advanced users experience hardships dealing with the many components involved.
 
-### ANNOUNCING EZANIMATION: A SET OF TOOLS TO MAKE ANIMATIONS MUCH EASIER
+### Announcing EzAnimation: A set of tools to make animations easier
 
 With EzAnimation, there is no need to burden your code with TickerProviders, the complicated logic of curves, different components of animation, etc.
 
